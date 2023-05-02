@@ -1,8 +1,21 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3';
+import JetDialogModal from '@/Components/DialogModal.vue';
+import { ref } from 'vue';
 
 defineProps({ users: Object })
+
+let ModalOpen = ref(false);
+
+let selectedUser = Object;
+
+function DeleteUser(selectedUser) {
+
+    router.delete(route('user.destroy', {'usuario':selectedUser}));
+    
+}
 
 </script>
 
@@ -52,9 +65,9 @@ defineProps({ users: Object })
                                         </svg>
                                     </Link>
 
-                                    <Link class="bg-white hover:bg-gray-300 font-bold py-2 px-4 rounded float-left" :href="route('user.destroy', { usuario: usuario })">
+                                    <button @click="ModalOpen=true;selectedUser=usuario;" class="py-2 px-4 rounded float-left"> 
                                         <svg class="h-8 w-8 text-red-500"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="4" y1="7" x2="20" y2="7" />  <line x1="10" y1="11" x2="10" y2="17" />  <line x1="14" y1="11" x2="14" y2="17" />  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
-                                    </Link>
+                                    </button>
                                     
                                     </td>
                                 </tr>
@@ -65,5 +78,30 @@ defineProps({ users: Object })
                 </div>
             </div>
         </div>
+        
+        <jet-dialog-modal :show="ModalOpen">
+
+            <template v-slot:title>
+                <h1>Eliminar Usuario</h1>
+            </template>
+
+            <template v-slot:content>
+                <h1 v-if="selectedUser">¿Seguro que quieres eliminar el usuario: {{ selectedUser.name }} ?</h1>
+            </template>
+
+            <template v-slot:footer>
+
+            <div class="flow-root pb-5 pt-3 pr-2">  
+                <Link class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right" @click="DeleteUser(selectedUser)">Eliminar</Link>
+            </div>
+                
+            <div class="flow-root pb-5 pt-3">  
+                <Link class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded float-right" @click="ModalOpen=false">Cerrar</Link>
+            </div>
+
+            </template>
+
+        </jet-dialog-modal>
+
     </AppLayout>
 </template>

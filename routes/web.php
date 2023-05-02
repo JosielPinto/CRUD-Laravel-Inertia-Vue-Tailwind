@@ -38,6 +38,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/user/show/{usuario}', [UserController::class, 'show'])->name('user.show');
     Route::get('/user/edit/{usuario}', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/user/update/{usuario}', [UserController::class, 'update'])->name('user.update');
-    Route::get('/user/destroy/{usuario}', [UserController::class, 'destroy'])->name('user.destroy');
+    Route::delete('/user/destroy/{usuario}', [UserController::class, 'destroy'])->name('user.destroy');
 
 });
